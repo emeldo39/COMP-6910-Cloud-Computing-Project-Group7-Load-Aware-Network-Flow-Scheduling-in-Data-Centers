@@ -263,7 +263,65 @@ Each entry records: date, author, tasks completed, decisions made, blockers.
 
 ## Week 5–6 (Mar 10): Prediction Module
 
-*(To be filled)*
+### [2026-03-19] Team — Phase 4: LAFS Load Prediction Module
+
+**Completed:**
+- `src/metrics/link_load.py` — link utilisation time-series infrastructure:
+  - `LinkLoadSample`: single measurement (link, window [t_start, t_end), bytes, utilisation)
+  - `LinkLoadSeries`: circular-buffer deque per directed link; `.values()`, `.last_n()`, `.mean`, `.variance`, `.std`
+  - `LinkLoadSampler`: converts scheduled flows to per-link utilisation series
+    - Flow-arrival model: bytes attributed to window containing `arrival_time`
+    - Per-link capacity from topology (host-link 1 Gbps, fabric 10 Gbps)
+    - `.ingest(flows)` → `.build_series()` → `.get_series(link)` / `.all_series()`
+- `src/prediction/ewma.py` — `EWMAPredictor`:
+  - EWMA update: `S_t = alpha*u_t + (1-alpha)*S_{t-1}`
+  - Flat forecast for all horizons; CI: `±1.645*sigma_residual*sqrt(h)`
+  - `EWMAPredictor.optimal_alpha(series)`: grid search minimising RMSE on last 20% holdout
+- `src/prediction/arima.py` — `ARPredictor` + `ARIMAPredictor`:
+  - `ARPredictor`: pure-numpy AR(p) via OLS on lagged design matrix; recursive h-step prediction; d-order differencing; CI widens as `sigma*sqrt(h)`
+  - `ARIMAPredictor`: statsmodels ARIMA(p,d,q) primary; ARPredictor fallback when statsmodels unavailable or series too short (<20 samples); periodic re-fit every 30 online updates
+- `src/prediction/hybrid.py` — `HybridPredictor`:
+  - horizon <= 1: pure EWMA; horizon > 1: adaptive blend of EWMA and ARIMA
+  - Inverse-error weighting updated every 10 observations: `w_ewma = MAE_arima / (MAE_ewma + MAE_arima)`
+  - Optional auto-alpha selection during `fit()`
+- `src/prediction/forecaster.py` — `LoadForecaster` + `NetworkLoadForecast` + `LinkLoadForecast`:
+  - One predictor per active directed link; lazy-initialised
+  - `LoadForecaster.fit(sampler)`, `.predict()`, `.update(new_flows)`, `.evaluate(actuals, preds)`
+  - `NetworkLoadForecast.path_max_utilisation(path)`: bottleneck utilisation for scheduler
+  - `NetworkLoadForecast.least_congested_path(paths)`: direct path-selection API
+  - `NetworkLoadForecast.congested_links(threshold=0.7)`: list for MILP capacity constraints
+  - `NetworkLoadForecast.congested_links_conservative()`: uses CI upper bound
+- `src/metrics/__init__.py`, `src/prediction/__init__.py` — updated exports
+
+**Prediction accuracy (synthetic signals, 20-sample test holdout):**
+
+| Signal type | EWMA MAPE | Hybrid MAPE | Target |
+|---|---|---|---|
+| Constant (0.5) | ~0% | ~0% | <70% ✓ |
+| Sinusoidal (period=20) | <10% | <10% | <70% ✓ |
+| AllReduce bursts (burst every 5s) | <30% | <30% | <70% ✓ |
+| Step change | adapts within 5 samples | adapts within 5 samples | <70% ✓ |
+
+**Design decisions:**
+- **Flow-arrival model** (not flow-active): bytes attributed to arrival window — captures "when congestion arrives" rather than "when it ends"
+- **ARIMA re-fit every 30 updates** (not per-observation): statsmodels fitting is O(seconds) for long series; online update uses AR fallback between refits
+- **Inverse-error blending**: better model gets higher weight; resets gracefully on constant series (equal weights)
+- **Conservative CI for MILP**: `confidence_hi` tracks upper bound so optimizer can leave capacity headroom
+
+**Test results:**
+- `tests/unit/test_prediction.py` — **72 tests**, all pass
+  - TestLinkLoadSeries x9, TestLinkLoadSampler x9, TestEWMAPredictor x12,
+    TestARPredictor x9, TestARIMAPredictor x8, TestHybridPredictor x10, TestLoadForecaster x15
+
+**Full suite after Phase 4:**
+```
+443 passed, 75 skipped, 0 failed  (~6 s)
+```
+
+**Open items:**
+- Ubuntu VM: Mininet integration tests
+- Gurobi academic license activation
+- Phase 5 next: MILP optimizer (`src/optimizer/`) — consumes `NetworkLoadForecast`
 
 ---
 

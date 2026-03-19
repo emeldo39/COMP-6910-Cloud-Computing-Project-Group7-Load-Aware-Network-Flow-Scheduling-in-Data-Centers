@@ -1,0 +1,53 @@
+# =============================================================================
+# LAFS Project — Python Dependencies (Ubuntu 20.04/22.04, Python 3.10/3.11)
+# COMP 6910 — Group 7
+#
+# THIS FILE IS FOR THE UBUNTU EXPERIMENT MACHINE (where Mininet runs).
+# For Windows development, use: pip install -r requirements-windows.txt
+#
+# Install: pip install -r requirements.txt
+# Requires: Python 3.10 or 3.11  (Ryu 4.34 is incompatible with 3.12+)
+# =============================================================================
+
+# ── SDN / Networking (Linux only — Ryu requires Python 3.10/3.11) ────────────
+ryu==4.34                       # Ryu SDN controller framework (OF 1.3 support)
+# mininet is installed system-wide via setup/install_mininet.sh — do NOT pip-install
+
+# ── Optimization / MILP ──────────────────────────────────────────────────────
+gurobipy==11.0.3                # Gurobi Python API (requires academic license)
+pulp==2.8.0                     # Open-source MILP solver (CBC backend, fallback)
+scipy==1.13.1                   # LP solver (scipy.optimize.linprog)
+
+# ── Time-Series / Statistics (EWMA + ARIMA) ──────────────────────────────────
+statsmodels==0.14.2             # ARIMA, EWMA, SARIMAX
+numpy==1.26.4                   # Numerical arrays (pinned for Ryu 4.34 compat)
+pandas==2.2.2                   # DataFrames, time-series indexing
+
+# ── Graph / Topology ─────────────────────────────────────────────────────────
+networkx==3.3                   # Fat-tree and Clos graph construction
+matplotlib==3.9.0               # Plotting (FCT CDFs, fairness charts)
+seaborn==0.13.2                 # Statistical visualizations
+
+# ── Machine Learning ──────────────────────────────────────────────────────────
+scikit-learn==1.5.0             # Feature scaling, train/test split
+
+# ── Experiment Management ────────────────────────────────────────────────────
+tqdm==4.66.4                    # Progress bars for long experiments
+click==8.1.7                    # CLI interface for experiment runner
+pyyaml==6.0.1                   # YAML config files for experiment params
+
+# ── Data Collection / Metrics ────────────────────────────────────────────────
+psutil==6.0.0                   # Controller CPU/memory monitoring
+prometheus-client==0.20.0       # Metrics export (optional)
+
+# ── Testing ──────────────────────────────────────────────────────────────────
+pytest==8.2.2                   # Test runner
+pytest-timeout==2.3.1           # Timeout plugin for network tests
+
+# ── Code Quality ─────────────────────────────────────────────────────────────
+black==24.4.2                   # Code formatter
+flake8==7.0.0                   # Linter
+
+# ── Jupyter (for analysis notebooks) ─────────────────────────────────────────
+jupyter==1.0.0
+ipykernel==6.29.4

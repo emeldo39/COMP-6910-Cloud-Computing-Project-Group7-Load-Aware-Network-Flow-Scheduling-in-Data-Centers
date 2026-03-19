@@ -1,0 +1,51 @@
+# =============================================================================
+# LAFS Project — Windows Development Dependencies
+# COMP 6910 — Group 7
+#
+# For: Windows development machine (code editing, MILP testing, analysis)
+# Compatible with: Python 3.12 and Python 3.13
+#
+# Install: pip install -r requirements-windows.txt
+#
+# NOT included (Linux/Mininet only):
+#   - ryu          (no Windows support; use Ubuntu experiment machine)
+#   - mininet      (Linux kernel feature; system-install only)
+# =============================================================================
+
+# ── Optimization / MILP ──────────────────────────────────────────────────────
+gurobipy>=11.0.3                # Gurobi Python API (requires academic license)
+pulp==2.8.0                     # Open-source MILP solver (CBC backend, fallback)
+scipy>=1.13.1                   # LP solver (scipy.optimize.linprog)
+
+# ── Time-Series / Statistics (EWMA + ARIMA) ──────────────────────────────────
+statsmodels>=0.14.2             # ARIMA, EWMA, SARIMAX
+numpy>=2.0.0                    # Python 3.13 requires numpy 2.x
+pandas>=2.2.2                   # DataFrames, time-series indexing
+
+# ── Graph / Topology ─────────────────────────────────────────────────────────
+networkx>=3.3                   # Fat-tree and Clos graph construction
+matplotlib>=3.9.0               # Plotting (FCT CDFs, fairness charts)
+seaborn>=0.13.2                 # Statistical visualizations
+
+# ── Machine Learning ──────────────────────────────────────────────────────────
+scikit-learn>=1.5.0             # Feature scaling, train/test split
+
+# ── Experiment Management ────────────────────────────────────────────────────
+tqdm>=4.66.4                    # Progress bars for long experiments
+click>=8.1.7                    # CLI interface for experiment runner
+pyyaml>=6.0.1                   # YAML config files for experiment params
+
+# ── Data Collection / Metrics ────────────────────────────────────────────────
+psutil>=6.0.0                   # CPU/memory monitoring
+
+# ── Testing ──────────────────────────────────────────────────────────────────
+pytest>=8.2.2                   # Test runner
+pytest-timeout>=2.3.1           # Timeout plugin for network tests
+
+# ── Code Quality ─────────────────────────────────────────────────────────────
+black>=24.4.2                   # Code formatter
+flake8>=7.0.0                   # Linter
+
+# ── Jupyter (for analysis notebooks) ─────────────────────────────────────────
+jupyter>=1.0.0
+ipykernel>=6.29.4

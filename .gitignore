@@ -1,0 +1,110 @@
+# =============================================================================
+# LAFS Project — .gitignore
+# =============================================================================
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# ── Virtual environment ───────────────────────────────────────────────────────
+venv/
+env/
+ENV/
+.venv/
+.env/
+
+# ── Environment variables (contains secrets/paths) ────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ── Gurobi license (never commit license files) ───────────────────────────────
+*.lic
+gurobi.log
+gurobi_*.log
+
+# ── Mininet / OVS artifacts ───────────────────────────────────────────────────
+mn_*.log
+*.pid
+/tmp/
+
+# ── Experiment outputs (large files — track only processed summaries) ─────────
+results/figures/*.png
+results/figures/*.pdf
+results/figures/*.svg
+results/metrics/*.csv
+results/metrics/*.json
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/traces/.gitkeep
+!results/figures/.gitkeep
+!results/metrics/.gitkeep
+
+# ── Jupyter notebooks checkpoints ────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ── LaTeX / Report build artifacts ───────────────────────────────────────────
+report/*.aux
+report/*.bbl
+report/*.blg
+report/*.fdb_latexmk
+report/*.fls
+report/*.log
+report/*.out
+report/*.synctex.gz
+report/*.toc
+report/*.pdf
+
+# ── IDE / Editor ─────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ── OS ────────────────────────────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+Desktop.ini
+ehthumbs.db
+
+# ── Mininet pcap captures ─────────────────────────────────────────────────────
+*.pcap
+*.pcapng
+
+# ── Large trace files (download separately) ───────────────────────────────────
+data/traces/*.csv
+data/traces/*.txt
+data/traces/*.tar.gz
+
+# ── Compiled protobuf ─────────────────────────────────────────────────────────
+*_pb2.py
+*_pb2_grpc.py

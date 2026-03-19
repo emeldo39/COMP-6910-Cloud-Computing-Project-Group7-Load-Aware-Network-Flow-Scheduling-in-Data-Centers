@@ -16,6 +16,7 @@ Usage:
     python tests/test_gurobi.py --solver pulp   (test PuLP fallback only)
 """
 
+import os
 import sys
 import time
 import random
@@ -26,13 +27,7 @@ import unittest
 # =============================================================================
 # Helper: solver selection
 # =============================================================================
-SOLVER = os.environ.get("LAFS_SOLVER", "gurobi") if "os" in dir() else "gurobi"
-
-try:
-    import os
-    SOLVER = os.environ.get("LAFS_SOLVER", "gurobi")
-except Exception:
-    SOLVER = "gurobi"
+SOLVER = os.environ.get("LAFS_SOLVER", "gurobi")
 
 
 # =============================================================================
@@ -103,10 +98,11 @@ class TestLPRelaxation(unittest.TestCase):
         from gurobipy import GRB
 
         # Random FCT and load data
+        # cap is set to total_load/n_paths + margin to guarantee feasibility
         random.seed(42)
         fct   = [[random.uniform(0.1, 5.0) for _ in range(n_paths)] for _ in range(n_flows)]
         load  = [random.uniform(0.1, 0.5) for _ in range(n_flows)]
-        cap   = [random.uniform(0.8, 1.2) for _ in range(n_paths)]
+        cap   = [sum(load) / n_paths + 0.5 for _ in range(n_paths)]
 
         m = gp.Model("lp_relaxation")
         m.setParam("OutputFlag", 0)
@@ -137,7 +133,8 @@ class TestLPRelaxation(unittest.TestCase):
         m.optimize()
         solve_ms = (time.perf_counter() - t0) * 1000
 
-        return {"status": m.Status, "obj": m.ObjVal, "solve_ms": solve_ms}
+        obj = m.ObjVal if m.Status == GRB.OPTIMAL else None
+        return {"status": m.Status, "obj": obj, "solve_ms": solve_ms}
 
     def _solve_lp_pulp(self, n_flows: int = 10, n_paths: int = 3) -> dict:
         import pulp
@@ -146,7 +143,7 @@ class TestLPRelaxation(unittest.TestCase):
         rnd.seed(42)
         fct  = [[rnd.uniform(0.1, 5.0) for _ in range(n_paths)] for _ in range(n_flows)]
         load = [rnd.uniform(0.1, 0.5) for _ in range(n_flows)]
-        cap  = [rnd.uniform(0.8, 1.2) for _ in range(n_paths)]
+        cap  = [sum(load) / n_paths + 0.5 for _ in range(n_paths)]
 
         prob = pulp.LpProblem("lp_relaxation", pulp.LpMinimize)
         x = [[pulp.LpVariable(f"x_{f}_{p}", lowBound=0, upBound=1)

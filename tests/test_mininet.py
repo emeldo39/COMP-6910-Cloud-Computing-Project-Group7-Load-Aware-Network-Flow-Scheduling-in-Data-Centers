@@ -22,27 +22,43 @@ import argparse
 import unittest
 
 # ── Guard: Mininet requires Linux + root ──────────────────────────────────────
+import pytest
+
+_MININET_AVAILABLE = False
+_SKIP_REASON = ""
+
 if sys.platform != "linux":
-    print("[SKIP] Mininet tests require Linux. Current platform:", sys.platform)
-    sys.exit(0)
+    _SKIP_REASON = f"Mininet requires Linux (current: {sys.platform})"
+elif os.geteuid() != 0:
+    _SKIP_REASON = "Mininet tests must be run as root (sudo)"
+else:
+    try:
+        from mininet.topo import Topo
+        from mininet.net import Mininet
+        from mininet.node import OVSSwitch, RemoteController, Controller
+        from mininet.link import TCLink
+        from mininet.log import setLogLevel, info
+        from mininet.clean import cleanup
+        from mininet.log import setLogLevel
+        setLogLevel("warning")
+        _MININET_AVAILABLE = True
+    except ImportError as e:
+        _SKIP_REASON = f"Mininet not installed: {e}. Run: sudo ./setup/install_mininet.sh"
 
-if os.geteuid() != 0:
-    print("[ERROR] Mininet tests must be run as root: sudo python tests/test_mininet.py")
-    sys.exit(1)
+_MN_SKIP = (
+    pytest.mark.skip(reason=_SKIP_REASON)
+    if not _MININET_AVAILABLE
+    else lambda cls: cls
+)
 
-try:
-    from mininet.topo import Topo
-    from mininet.net import Mininet
-    from mininet.node import OVSSwitch, RemoteController, Controller
-    from mininet.link import TCLink
-    from mininet.log import setLogLevel, info
-    from mininet.clean import cleanup
-except ImportError as e:
-    print(f"[ERROR] Mininet not installed: {e}")
-    print("        Run: sudo ./setup/install_mininet.sh")
-    sys.exit(1)
-
-setLogLevel("warning")
+# Provide a stub Topo so the class definition doesn't fail on Windows
+if not _MININET_AVAILABLE:
+    class Topo:  # type: ignore[no-redef]
+        def __init__(self, *a, **kw): pass
+        def addSwitch(self, n, **kw): return n
+        def addHost(self, n, **kw): return n
+        def addLink(self, *a, **kw): pass
+        def build(self, **kw): pass
 
 
 # =============================================================================
@@ -120,6 +136,7 @@ class FatTreeTopo(Topo):
 # =============================================================================
 # Test cases
 # =============================================================================
+@_MN_SKIP
 class TestMininetImport(unittest.TestCase):
     """Test that Mininet modules import correctly."""
 
@@ -146,6 +163,7 @@ class TestMininetImport(unittest.TestCase):
         self.assertTrue(callable(TCLink))
 
 
+@_MN_SKIP
 class TestFatTreeTopology(unittest.TestCase):
     """Test Fat-tree topology construction."""
 

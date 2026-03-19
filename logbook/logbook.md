@@ -109,7 +109,110 @@ Each entry records: date, author, tasks completed, decisions made, blockers.
 
 ## Week 3–4 (Feb 24): Baseline Implementation
 
-*(To be filled)*
+### [2026-03-19] Team — Phase 2a: Scheduler Infrastructure & ECMP Baseline
+
+**Completed:**
+- `src/workload/flow.py` — `Flow` dataclass (5-tuple + metadata):
+  - Fields: `flow_id`, `src_ip`, `dst_ip`, `src_port`, `dst_port`, `protocol`, `size_bytes`, `arrival_time`, `deadline`
+  - Properties: `five_tuple`, `is_mice` (<100 KB), `is_elephant` (≥1 MB), `fct`, `ideal_fct`, `slowdown`, `meets_deadline`
+  - `Flow.create()` classmethod, `Flow.new_id()` UUID helper, `__post_init__` validation
+- `src/scheduler/base_scheduler.py` — `BaseScheduler` ABC + `SchedulerMetrics`:
+  - Abstract API: `schedule_flow(flow)` → `Optional[List[str]]`; concrete `schedule_flows(flows)` handles metrics + path assignment
+  - `SchedulerMetrics`: mice/medium/elephant counts, path_usage histogram, avg/p99 latency, Jain's index
+  - `get_candidate_paths()` wraps `node_for_ip()` with `try/except KeyError` for safe IP lookup
+- `src/scheduler/ecmp.py` — `ECMPScheduler`:
+  - `ecmp_hash()`: CRC32 of 13-byte packed 5-tuple (`struct.pack("!IIHHB")`), returns uint32
+  - Path selection: `hash % n_paths`; `_path_cache` keyed on `(src_node, dst_node)` pair
+  - `path_balance_ratio()` (min/max load), `ecmp_stats()`, `hash_distribution()` helpers
+
+**Bugs found and fixed:**
+1. `FatTreeGraph.node_for_ip()` raises `KeyError` (not returns None) — wrapped all call sites in `try/except KeyError`.
+2. Metrics only update via `schedule_flows()` — tests expecting metric updates were corrected to call the batch API.
+
+---
+
+### [2026-03-19] Team — Phase 2b: Hedera & CONGA Baselines
+
+**Completed:**
+- `src/scheduler/hedera.py` — `HederaScheduler` + `PathLoadTracker`:
+  - Mice flows → internal `ECMPScheduler` (no load tracking)
+  - Elephant flows → Global First Fit: `PathLoadTracker.least_loaded_path()` assigns to least-utilised candidate
+  - `reschedule_elephants()`: release all elephant flows, sort by size descending, re-place with GFF
+  - `PathLoadTracker`: per-path byte accounting, utilisation = `bytes×8 / link_capacity_bits`
+- `src/scheduler/conga.py` — `CONGAScheduler` + `CongestionTable` + `FlowletTable`:
+  - `CongestionTable`: DRE via EWMA (`alpha`) + exponential time-decay (`decay_rate`); `best_path_idx()` picks min-DRE path
+  - `FlowletTable`: flowlet gap detection (500 µs default); continuing flowlets keep same path
+  - `inject_congestion()` for test harness control; `evict_expired_flowlets()` for memory hygiene
+- `src/scheduler/__init__.py` — exports all six scheduler symbols
+
+**Test results:**
+- `tests/unit/test_scheduler.py` — **71 tests**, all pass (Flow dataclass ×22, ECMP hash ×12, BaseScheduler ×8, ECMP unit ×18, integration ×10 — 100 flows)
+- `tests/unit/test_hedera.py` — **46 tests**, all pass (PathLoadTracker ×14, HederaScheduler ×20, integration ×12)
+- `tests/unit/test_conga.py` — **51 tests**, all pass (CongestionTable ×14, FlowletTable ×10, CONGAScheduler ×18, integration ×12)
+
+**Full suite after Phase 2:**
+```
+279 passed, 75 skipped, 0 failed  (~10 s)
+```
+
+**Committed:** baseline scheduler infrastructure + ECMP + Hedera + CONGA
+
+---
+
+### [2026-03-19] Team — Phase 3: Workload Generation System
+
+**Completed:**
+- `src/workload/facebook_websearch.py` — `FacebookWebSearchGenerator`:
+  - Empirical CDF from Benson et al. IMC 2010 (6 piecewise-uniform segments)
+  - 20% <1 KB · 55% <10 KB · 90% <100 KB (mice) · 98% <10 MB · 100% ≤100 MB
+  - Poisson inter-arrival; TCP port pool {80, 443, 8080, 8443}; multi-tenant round-robin host partition
+  - `cross_tenant_fraction` (5%) and `aggregator_fraction` (25%) for realistic request routing
+- `src/workload/allreduce.py` — `AllReduceGenerator`:
+  - Ring AllReduce (NCCL-style): n_workers flows/iteration, shard_bytes = gradient / n_workers, `dst_port=29500`
+  - PS mode: 2×(n_workers−1) flows (upload at t, download at t+1 ms)
+  - Pipeline parallelism: 2×(stages−1) activation flows per iteration boundary
+  - ±10% Gaussian jitter on `iteration_gap_s`; simulation clock advances by gap + estimated AllReduce duration
+  - Model presets: `resnet50` 25 MB · `bert_base` 110 MB · `gpt2` 548 MB · `llama_7b` 14 GB
+- `src/workload/microservice.py` — `MicroserviceRPCGenerator` + `ServiceGraph`:
+  - `ServiceGraph` factory methods: `linear_chain()`, `fan_out()`, `mixed_dag()`
+  - Kahn's topological ordering; `node_ready` timing propagation for chain RTT accumulation
+  - 2 flows per edge (request tiny + response small-medium); optional DB data-payload flows
+  - Rack-aware placement groups services by edge-switch; random mode shuffles and round-robins
+- `src/workload/runner.py` — `WorkloadRunner` + `WorkloadConfig` + `WorkloadStats`:
+  - `WorkloadConfig`: proportional weight allocation across generators; `mixed` expands to all three
+  - Per-generator sub-seed: `seed + hash(wt) % 100_000` for reproducible independence
+  - Reservoir sub-sampling preserves time order when merged count exceeds `n_flows`
+  - `WorkloadStats`: mice/medium/elephant counts, percentiles (P50/P90/P99), arrival rate, Jain's fairness index over tenant flow counts: $(Σx)^2 / (n·Σx^2)$
+- `src/workload/__init__.py` — updated exports (all 13 symbols)
+
+**Workload validation:**
+| Generator | Key property | Verified |
+|---|---|---|
+| Facebook web search | Mice fraction ≥ 85% | ✓ (≈ 90%) |
+| Facebook web search | Max size ≤ 100 MB | ✓ |
+| AllReduce (ring) | Flows = n_workers × n_iterations | ✓ |
+| AllReduce (ring) | Ring adjacency | ✓ |
+| AllReduce (PS) | Flows = 2×(n_workers−1)×n_iterations | ✓ |
+| Microservice | Topological order respected | ✓ |
+| Microservice | Sorted by arrival_time | ✓ |
+| Runner (mixed) | All three generators present | ✓ |
+| Runner stats | Jain's index ∈ [0, 1] | ✓ |
+
+**Test results:**
+- `tests/unit/test_workload.py` — **63 tests**, all pass
+  - FacebookWebSearch ×18, AllReduce ×16, MicroserviceRPC ×15, WorkloadRunner ×14
+
+**Full suite after Phase 3:**
+```
+342 passed, 75 skipped, 0 failed  (~13 s)
+```
+
+**Open items:**
+- Ubuntu VM: run Mininet integration tests (`--k 4`, `--k 8`)
+- Gurobi academic license activation (pending university email at gurobi.com)
+- Phase 4 next: EWMA + ARIMA prediction module (`src/prediction/`)
+
+---
 
 ---
 

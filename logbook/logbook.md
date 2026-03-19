@@ -214,6 +214,51 @@ Each entry records: date, author, tasks completed, decisions made, blockers.
 
 ---
 
+### [2026-03-19] Team — Week 4 Checkpoint: End-to-End Integration & Demo Prep
+
+**Completed:**
+- `tests/integration/test_e2e_week4.py` — 29-test end-to-end integration suite:
+  - Full pipeline: `FatTreeGraph(k=8)` → `FacebookWebSearchGenerator` → `ECMPScheduler` → `PathFIFOSimulator` → `MetricsReport`
+  - `PathFIFOSimulator`: work-conserving FIFO per ECMP path; models per-path head-of-line blocking with 5 µs/hop propagation delay
+  - Checks: topology correctness (3), workload properties (5), scheduling quality (8), FCT values (5), reproducibility (2), hash correctness (2), path hop counts (2 valid lengths: 3/5/7 nodes), no consecutive duplicates
+  - Standalone mode: prints ASCII report + writes `results/week4_e2e_summary.json`
+- `demo/week4_checkpoint_demo.md` — complete professor demo script:
+  - What to show (5 segments, 10–15 min)
+  - Pre-demo checklist
+  - Narrated talking points for each output line
+  - Anticipated Q&A (7 questions with full answers)
+  - Key numbers table for quick recall
+
+**Week 4 checkpoint results (all passing):**
+
+| Metric | Measured | Status |
+|--------|----------|--------|
+| Fat-tree k=8 built | 128 hosts, 80 switches | OK |
+| Flows generated | 1,000 | OK |
+| Mice fraction | 88.9% | OK (target ~90%) |
+| Flows scheduled | 1,000 / 1,000 | OK |
+| Unique ECMP paths used | 956 | OK |
+| Path balance ratio | 0.571 | OK |
+| Avg scheduling latency | 607 µs | OK (< 1 ms) |
+| Mice P50 FCT | 0.083 ms | OK (~ideal: 0.08 ms) |
+| Mice P99 FCT | 0.82 ms | OK (~10x ideal) |
+| Elephant P50 FCT | 71.3 ms | baseline (LAFS target: -40%) |
+| Elephant P99 FCT | 770 ms | baseline |
+| Jain's fairness index | 0.997 | OK |
+| All integration checks | 13/13 passed | OK |
+
+**Full suite after Week 4 checkpoint:**
+```
+371 passed, 75 skipped, 0 failed  (~10 s)
+```
+
+**Open items (unchanged):**
+- Ubuntu VM: Mininet integration tests
+- Gurobi academic license
+- Next: EWMA + ARIMA prediction module (Phase 4, Weeks 5-6)
+
+---
+
 ---
 
 ## Week 5–6 (Mar 10): Prediction Module

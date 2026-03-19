@@ -1,0 +1,28 @@
+{
+  "topology": {
+    "k": 8,
+    "hosts": 128,
+    "switches": 80
+  },
+  "workload": {
+    "n_flows": 1000,
+    "mice_fraction": 0.889,
+    "elephant_fraction": 0.018,
+    "mean_size_bytes": 1292232.5,
+    "jains_index": 0.997
+  },
+  "scheduling": {
+    "scheduled": 1000,
+    "failed": 0,
+    "unique_paths": 956,
+    "balance_ratio": 0.5714,
+    "avg_latency_us": 606.864,
+    "p99_latency_us": 3310.3
+  },
+  "fct_ms": {
+    "p50": 0.0932,
+    "p95": 7.2848,
+    "p99": 476.1622,
+    "max": 770.8467
+  }
+}

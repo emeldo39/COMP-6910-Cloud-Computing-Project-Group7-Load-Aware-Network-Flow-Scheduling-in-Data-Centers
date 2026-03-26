@@ -1,7 +1,7 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 LAFS Project — Gurobi / MILP Solver Verification Test
-COMP 6910 — Group 7
+COMP-6910 — Group 7
 
 Tests:
   1. gurobipy imports and license is valid

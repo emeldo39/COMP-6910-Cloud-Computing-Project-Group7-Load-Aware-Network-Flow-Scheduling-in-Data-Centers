@@ -1,7 +1,7 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 LAFS Project — Mininet Verification Test
-COMP 6910 — Group 7
+COMP-6910 — Group 7
 
 Tests:
   1. Mininet imports correctly

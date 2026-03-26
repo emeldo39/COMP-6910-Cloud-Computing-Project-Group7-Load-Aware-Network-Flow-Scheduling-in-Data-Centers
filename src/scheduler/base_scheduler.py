@@ -1,7 +1,7 @@
-"""
+﻿"""
 LAFS — BaseScheduler
 ====================
-COMP 6910 — Group 7
+COMP-6910 — Group 7
 
 Abstract base class that every LAFS scheduler must extend.
 

@@ -1,7 +1,7 @@
-"""
+﻿"""
 LAFS -- MILP Flow Placement Solver
 ====================================
-COMP 6910 -- Group 7
+COMP-6910 -- Group 7
 
 Solves the multi-objective flow placement MILP:
 

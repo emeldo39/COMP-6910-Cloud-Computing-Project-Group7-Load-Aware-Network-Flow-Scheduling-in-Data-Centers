@@ -1,7 +1,7 @@
-"""
+﻿"""
 LAFS — Workload Runner & Statistics
 =====================================
-COMP 6910 — Group 7
+COMP-6910 — Group 7
 
 Unified entry point for workload generation and flow statistics.
 

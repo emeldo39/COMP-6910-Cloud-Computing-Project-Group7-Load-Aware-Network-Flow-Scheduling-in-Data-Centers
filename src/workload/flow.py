@@ -1,7 +1,7 @@
-"""
+﻿"""
 LAFS — Flow dataclass
 =====================
-COMP 6910 — Group 7
+COMP-6910 — Group 7
 
 A Flow represents a single network transmission identified by its 5-tuple.
 It carries all scheduling-relevant metadata and is the primary unit of work

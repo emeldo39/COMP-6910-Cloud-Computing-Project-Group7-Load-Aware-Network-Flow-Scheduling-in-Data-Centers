@@ -1,7 +1,7 @@
-"""
+﻿"""
 LAFS -- Week 4 End-to-End Integration Test
 ==========================================
-COMP 6910 -- Group 7
+COMP-6910 -- Group 7
 
 Verifies the full pipeline on Windows (no Mininet):
 
@@ -167,7 +167,7 @@ def build_report(
         "",
         "=" * 67,
         "  LAFS Week 4 End-to-End Integration Report",
-        "  COMP 6910 -- Group 7",
+        "  COMP-6910 -- Group 7",
         "=" * 67,
         "",
         "--- 1. Topology " + "-" * 51,

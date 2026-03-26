@@ -1,6 +1,6 @@
-# Fat-Tree Topology — Architecture & Usage Guide
+﻿# Fat-Tree Topology — Architecture & Usage Guide
 
-**LAFS Project, COMP 6910 — Group 7**
+**LAFS Project, COMP-6910 — Group 7**
 
 ---
 

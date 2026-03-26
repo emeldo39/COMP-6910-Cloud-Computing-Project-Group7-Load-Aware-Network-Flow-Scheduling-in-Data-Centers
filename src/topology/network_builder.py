@@ -1,7 +1,7 @@
-"""
+﻿"""
 LAFS Project — Network Builder
 ================================
-COMP 6910 — Group 7
+COMP-6910 — Group 7
 
 Provides :class:`NetworkBuilder`: a high-level wrapper that combines
 :class:`~src.topology.fattree.FatTreeTopo` with a Ryu remote controller

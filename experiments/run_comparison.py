@@ -1,7 +1,7 @@
-"""
+﻿"""
 LAFS -- Scheduler Comparison Experiment
 =========================================
-COMP 6910 -- Group 7
+COMP-6910 -- Group 7
 
 Compares ECMP, Hedera, CONGA, and LAFS on identical Facebook web-search
 workloads across four load levels (30 %, 50 %, 70 %, 90 %).

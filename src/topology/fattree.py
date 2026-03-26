@@ -1,7 +1,7 @@
-"""
+﻿"""
 LAFS Project — Fat-Tree Topology Implementation
 ================================================
-COMP 6910 — Group 7
+COMP-6910 — Group 7
 
 This module provides two complementary classes:
 

@@ -1,7 +1,7 @@
-"""
+﻿"""
 LAFS -- EWMA Predictor
 ======================
-COMP 6910 -- Group 7
+COMP-6910 -- Group 7
 
 Exponentially Weighted Moving Average (EWMA) predictor for short-term
 (<= 1 step ahead) link utilisation forecasting.

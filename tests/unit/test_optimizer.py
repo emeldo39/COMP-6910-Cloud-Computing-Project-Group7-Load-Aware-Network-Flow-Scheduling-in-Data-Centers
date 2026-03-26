@@ -1,7 +1,7 @@
-"""
+﻿"""
 Unit tests -- LAFS Optimizer (Phase 5)
 ========================================
-COMP 6910 -- Group 7
+COMP-6910 -- Group 7
 
 Coverage
 --------

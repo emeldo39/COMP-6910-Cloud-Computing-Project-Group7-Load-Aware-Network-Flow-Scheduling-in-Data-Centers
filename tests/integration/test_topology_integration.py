@@ -1,7 +1,7 @@
-"""
+﻿"""
 LAFS Project — Integration Tests: Fat-Tree Topology
 =====================================================
-COMP 6910 — Group 7
+COMP-6910 — Group 7
 
 End-to-end tests that start a real Mininet network, connect it to a Ryu
 controller, install flow rules, and verify correctness.

@@ -1,7 +1,7 @@
-"""
+﻿"""
 LAFS — Facebook Web Search Workload Generator
 ==============================================
-COMP 6910 — Group 7
+COMP-6910 — Group 7
 
 Generates synthetic flow traces that match the statistical properties of
 Facebook's web search cluster traffic as described in:

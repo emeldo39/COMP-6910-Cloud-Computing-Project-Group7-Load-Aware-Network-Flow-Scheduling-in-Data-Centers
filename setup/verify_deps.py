@@ -1,7 +1,7 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 LAFS Project — Dependency Verification Script
-COMP 6910 — Group 7
+COMP-6910 — Group 7
 
 Checks all required Python packages, system tools, and services
 needed to run the LAFS experiments.

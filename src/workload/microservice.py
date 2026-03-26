@@ -1,7 +1,7 @@
-"""
+﻿"""
 LAFS — Google Microservice RPC Chain Workload Generator
 =======================================================
-COMP 6910 — Group 7
+COMP-6910 — Group 7
 
 Generates synthetic traffic traces modelling Google-style microservice
 architectures where user-facing services decompose requests into a graph

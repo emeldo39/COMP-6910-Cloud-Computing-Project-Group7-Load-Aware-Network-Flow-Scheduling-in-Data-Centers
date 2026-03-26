@@ -1,7 +1,7 @@
-"""
+﻿"""
 LAFS — CONGA Scheduler (Simulated)
 ====================================
-COMP 6910 — Group 7
+COMP-6910 — Group 7
 
 Simulates the core CONGA (Congestion-aware Load Balancing at the Granularity
 of Flowlets for Data Center Networks) algorithm.

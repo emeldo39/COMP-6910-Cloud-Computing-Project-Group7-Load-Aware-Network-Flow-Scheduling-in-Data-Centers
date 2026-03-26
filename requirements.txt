@@ -1,6 +1,6 @@
-# =============================================================================
+﻿# =============================================================================
 # LAFS Project — Python Dependencies (Ubuntu 20.04/22.04, Python 3.10/3.11)
-# COMP 6910 — Group 7
+# COMP-6910 — Group 7
 #
 # THIS FILE IS FOR THE UBUNTU EXPERIMENT MACHINE (where Mininet runs).
 # For Windows development, use: pip install -r requirements-windows.txt

@@ -1,7 +1,7 @@
-"""
+﻿"""
 LAFS -- Load Forecaster
 ========================
-COMP 6910 -- Group 7
+COMP-6910 -- Group 7
 
 Main prediction entry point: fits per-link predictors to time-series data
 from LinkLoadSampler and produces NetworkLoadForecast objects that the

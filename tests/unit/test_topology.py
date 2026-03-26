@@ -1,7 +1,7 @@
-"""
+﻿"""
 LAFS Project — Unit Tests: Fat-Tree Topology
 =============================================
-COMP 6910 — Group 7
+COMP-6910 — Group 7
 
 Tests FatTreeGraph (pure NetworkX, no Mininet) and all naming/IP helpers.
 These tests run on ANY platform (Windows, Linux, macOS) without root.

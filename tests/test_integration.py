@@ -1,7 +1,7 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 LAFS Project — End-to-End Integration Test ("Hello World" for LAFS)
-COMP 6910 — Group 7
+COMP-6910 — Group 7
 
 This test verifies the full pipeline works:
   1. Build a k=4 Fat-tree topology in Mininet

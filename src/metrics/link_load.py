@@ -1,7 +1,7 @@
-"""
+﻿"""
 LAFS -- Link Load Sampler
 =========================
-COMP 6910 -- Group 7
+COMP-6910 -- Group 7
 
 Converts per-flow scheduling events into per-link utilisation time series.
 

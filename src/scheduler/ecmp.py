@@ -1,7 +1,7 @@
-"""
+﻿"""
 LAFS — ECMP Scheduler
 =====================
-COMP 6910 — Group 7
+COMP-6910 — Group 7
 
 Equal-Cost Multi-Path (ECMP) scheduler: the canonical baseline against
 which LAFS and all other schedulers are compared.

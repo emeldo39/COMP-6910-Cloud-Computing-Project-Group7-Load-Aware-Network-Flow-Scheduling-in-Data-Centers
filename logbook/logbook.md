@@ -1,10 +1,10 @@
-# LAFS Project Logbook
-**COMP 6910 — Group 7**
+﻿# LAFS Project Logbook
+**COMP-6910 — Group 7**
 
 | Member | Student ID |
 |---|---|
 | Victor Chisom Muojeke | 202480408 |
-| Chiemerie Cletus Obijaiku | 202492457 |
+| Chiemerie Cletus Obijiaku | 202492457 |
 | Olaleye Adeniyi AKINULI | 202488212 |
 
 ---
@@ -459,4 +459,39 @@ Each entry records: date, author, tasks completed, decisions made, blockers.
 
 ## Week 11 (Apr 10): Report & Packaging
 
-*(To be filled)*
+### [2026-03-26] Team — Phase 7: Final Report & README
+
+**Completed:**
+- README.md fully rewritten to reflect actual project state: correct directory structure, "What is Actually Built" table (all modules, file counts, test counts), Windows + Ubuntu quick-start guides, programmatic API example, experimental results table, MILP solver performance table, updated milestones, updated deliverables checklist.
+- `report/main.tex` created: 10-page LNCS-format LaTeX report.
+
+**Report structure (`report/main.tex`):**
+- §1 Introduction — contributions, motivation (ECMP hash collisions, elephant/mice problem)
+- §2 Background — fat-tree topology, ECMP/Hedera/CONGA, Alibaba HPN
+- §3 System Model — network/flow/scheduling-window model, performance metrics
+- §4 Method — hybrid EWMA+ARIMA predictor; MILP formulation (objective, assignment, utilisation constraints); greedy fallback; Algorithm 1
+- §5 Implementation — five-package architecture, PuLP/Gurobi backend, 486 tests (Table 1)
+- §6 Evaluation — experimental setup (M/G/1 on fabric-only links, hot-spot traffic), scheduler comparison (Table 2), key findings, ablation (Table 3), MILP solver performance (Table 4)
+- §7 Discussion — simulation fidelity, scalability analysis, SDN integration, limitations
+- §8 Conclusion
+- Bibliography: 9 entries (Al-Fares SIGCOMM 08, Hedera NSDI 10, CONGA SIGCOMM 14, Benson IMC 10, Alibaba HPN SIGCOMM 24, Jain fairness, PuLP, NetworkX, statsmodels)
+
+**Key design decisions documented in report:**
+- Demand normalisation: `b_f = B_f * 8 / T_sim` (simulation duration, not scheduling window) avoids MILP infeasibility
+- Fabric-only metrics: host-edge links excluded from utilisation comparison (path-independent)
+- Mice hop penalty λ=1e-3: reduces P99 FCT by routing short flows on shorter paths
+- MILP scale: ~16,001 vars, ~1,384 constraints, 3.0s P50 solve time (PuLP/CBC)
+- Simulation limitation honestly acknowledged: k=8 full-bisection-bandwidth fabric at <2% utilisation; differentiation requires >50,000 flows or reduced capacity
+
+**Remaining deliverables:**
+- [ ] Compile `report/main.tex` → `report/lafs_report.pdf` (requires LaTeX distribution: TeX Live or MiKTeX)
+- [ ] Final zip of project directory for D2L submission
+
+**Notes for compilation:**
+```bash
+# Requires LNCS llncs.cls from Springer (https://www.springer.com/gp/computer-science/lncs/conference-proceedings-guidelines)
+# Place llncs.cls in report/ directory, then:
+cd report/
+pdflatex main.tex
+pdflatex main.tex   # second pass for references
+```

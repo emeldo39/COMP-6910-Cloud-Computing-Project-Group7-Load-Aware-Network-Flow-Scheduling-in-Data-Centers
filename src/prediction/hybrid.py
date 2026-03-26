@@ -1,7 +1,7 @@
-"""
+﻿"""
 LAFS -- Hybrid EWMA+ARIMA Predictor
 =====================================
-COMP 6910 -- Group 7
+COMP-6910 -- Group 7
 
 Combines EWMA (fast, low-latency) and ARIMA (autocorrelation-aware) predictors
 into a single adaptive forecaster.

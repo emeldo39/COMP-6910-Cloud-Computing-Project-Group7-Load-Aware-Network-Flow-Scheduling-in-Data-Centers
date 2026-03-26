@@ -1,7 +1,7 @@
-"""
+﻿"""
 LAFS -- Prediction Module Unit Tests
 =====================================
-COMP 6910 -- Group 7
+COMP-6910 -- Group 7
 
 Tests for:
   LinkLoadSampler / LinkLoadSeries    (TestLinkLoadSampler, TestLinkLoadSeries)

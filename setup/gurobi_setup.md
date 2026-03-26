@@ -1,5 +1,5 @@
-# Gurobi Academic License — Setup Guide
-**LAFS Project, COMP 6910 — Group 7**
+﻿# Gurobi Academic License — Setup Guide
+**LAFS Project, COMP-6910 — Group 7**
 
 Gurobi is a commercial MILP solver that offers **free academic licenses** for students and researchers. This guide covers the full setup from license registration to Python binding verification.
 
@@ -11,10 +11,10 @@ Gurobi is a commercial MILP solver that offers **free academic licenses** for st
 
 1. Go to: https://www.gurobi.com/academia/academic-program-and-licenses/
 2. Click **"Request a Free Academic License"**
-3. Register with your **university email** (e.g., `@concordia.ca`)
+3. Register with your **university email** (e.g., `@mun.ca`)
 4. Verify your email — you will receive a **license key** (looks like: `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`)
 
-> Concordia University qualifies for the Named-User Academic License (single machine, free).
+> Memorial University of Newfoundland qualifies for the Named-User Academic License (single machine, free).
 
 ---
 
@@ -150,7 +150,7 @@ pip install gurobipy==11.0.3
 
 ### Error: `License expired` or `License validation failed`
 - Academic Named-User licenses are valid for **1 year** — renew at gurobi.com
-- Ensure you are on a network where the license server can validate (Concordia VPN or campus network may be required)
+- Ensure you are on a network where the license server can validate (MUN VPN or campus network may be required)
 
 ### Error: `No module named 'gurobipy'` inside Mininet namespace
 - Mininet host namespaces share the host kernel but NOT the Python venv

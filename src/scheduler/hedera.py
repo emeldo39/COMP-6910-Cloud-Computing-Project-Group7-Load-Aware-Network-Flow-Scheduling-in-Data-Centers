@@ -1,7 +1,7 @@
-"""
+﻿"""
 LAFS — Hedera Scheduler
 =======================
-COMP 6910 — Group 7
+COMP-6910 — Group 7
 
 Simulates the Hedera global traffic management system for fat-tree networks.
 

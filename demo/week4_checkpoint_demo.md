@@ -1,5 +1,5 @@
-# LAFS -- Week 4 Demo Script
-**COMP 6910 -- Group 7**
+﻿# LAFS -- Week 4 Demo Script
+**COMP-6910 -- Group 7**
 **Checkpoint date: week of Feb 24, 2026**
 
 ---
@@ -312,4 +312,4 @@ make a better demo if time is short.
 
 ---
 
-*Generated: 2026-03-19 | LAFS COMP 6910 Group 7*
+*Generated: 2026-03-19 | LAFS COMP-6910 Group 7*

@@ -1,7 +1,7 @@
-"""
+﻿"""
 LAFS — Synthetic AllReduce Workload Generator
 =============================================
-COMP 6910 — Group 7
+COMP-6910 — Group 7
 
 Generates synthetic traffic traces that model distributed deep-learning
 training workloads, specifically the AllReduce collective operation used by

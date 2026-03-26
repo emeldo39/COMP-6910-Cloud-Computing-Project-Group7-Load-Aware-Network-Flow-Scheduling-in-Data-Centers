@@ -1,7 +1,7 @@
-"""
+﻿"""
 LAFS -- Load-Aware Flow Scheduler
 ====================================
-COMP 6910 -- Group 7
+COMP-6910 -- Group 7
 
 LAFSScheduler integrates three components into one scheduler:
 

@@ -1,7 +1,7 @@
-"""
+﻿"""
 LAFS -- AR / ARIMA Predictor
 =============================
-COMP 6910 -- Group 7
+COMP-6910 -- Group 7
 
 Autoregressive predictor for medium-term (1-10 step) link utilisation
 forecasting.

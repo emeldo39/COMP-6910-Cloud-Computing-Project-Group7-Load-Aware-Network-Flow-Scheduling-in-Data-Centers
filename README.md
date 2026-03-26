@@ -5,7 +5,7 @@
 | Member | Student ID |
 |---|---|
 | Victor Chisom Muojeke | 202480408 |
-| Chiemerie Cletus Obijaiku | 202492457 |
+| Chiemerie Cletus Obijiaku | 202492457 |
 | Olaleye Adeniyi AKINULI | 202488212 |
 
 ---
